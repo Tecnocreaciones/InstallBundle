@@ -1,0 +1,25 @@
+{
+    "name": "tecnocreaciones/install-bundle",
+    "description": "Provides installation commands to install or uninstall the application quickly",
+    "keywords": ["Install management"],
+    "homepage": "https://github.com/tecnocreaciones",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Carlos Mendoza",
+            "email": "inhack20@tecnocreaciones.com.ve"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/console": "*",
+        "doctrine/orm": "*",
+        "doctrine/doctrine-fixtures-bundle": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "Tecnocreaciones\\Bundle\\InstallBundle": "" }
+    },
+    "target-dir": "Tecnocreaciones/Bundle/InstallBundle"
+}
