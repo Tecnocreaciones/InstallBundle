@@ -97,28 +97,33 @@ class InstallCommand extends ContainerAwareCommand
 
         $output->writeln('');
         $output->writeln('<info>Administration setup.</info>');
-
-        $userClass = $this->getContainer()->getParameter('tec_install.model.user.class');
-        $user = new $userClass;
+        
+        $userManager = $this->getContainer()->get('fos_user.user_manager');
+        $user = $userManager->create();
         
         $username = $this->getContainer()->getParameter('tec_install.credentials.username');
         $password = $this->getContainer()->getParameter('tec_install.credentials.password');
         $email = $this->getContainer()->getParameter('tec_install.credentials.email');
         $role = $this->getContainer()->getParameter('tec_install.credentials.role');
          
+        $roles = array();
+        $roles['role'] = $role;
+        if($this->getApplication()->getKernel()->isClassInActiveBundle('Sonata\AdminBundle\SonataAdminBundle')){
+            $roles[]= 'ROLE_SONATA_ADMIN';
+        }
         $username = $dialog->ask($output, sprintf('<question>Username[%s]:</question>',$username),$username);
         $password = $dialog->ask($output, sprintf('<question>Password[%s]:</question>',$password),$password);
         $email = $dialog->ask($output, sprintf('<question>Email[%s]:</question>',$email),$email);
-        $role = $dialog->ask($output, sprintf('<question>Role[%s]:</question>',$role),$role);
+        $role = $dialog->ask($output, sprintf('<question>Role[%s]:</question>',implode(',',$roles)),$role);
+        $roles['role'] = $role;
+        
         $user->setUsername($username);
         $user->setPlainPassword($password);
         $user->setEmail($email);
         $user->setEnabled(true);
-        $user->setRoles(array($role));
-
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $em->persist($user);
-        $em->flush();
+        
+        $user->setRoles($roles);
+        $userManager->save($user);
 
         $output->writeln('');
 

@@ -21,7 +21,6 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('tecnocreaciones_install');
         $rootNode
                 ->children()
-                    ->scalarNode('user_class')->isRequired()->cannotBeEmpty()->end()
                     ->arrayNode('credentials')
                         ->addDefaultsIfNotSet()
                         ->children()

@@ -22,7 +22,6 @@ class TecnocreacionesInstallExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
         
-        $container->setParameter('tec_install.model.user.class', $config['user_class']);
         $container->setParameter('tec_install.credentials.username', $config['credentials']['username']);
         $container->setParameter('tec_install.credentials.password', $config['credentials']['password']);
         $container->setParameter('tec_install.credentials.email', $config['credentials']['email']);

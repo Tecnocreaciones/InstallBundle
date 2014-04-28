@@ -45,7 +45,7 @@ class UninstallCommand extends ContainerAwareCommand {
 
     protected function setupStep(InputInterface $input, OutputInterface $output)
     {
-
+        $env = $input->getOption('env');
         $dialog = $this->getHelperSet()->get('dialog');
         
         $output->writeln('<info>Setting down database.</info>');
@@ -69,8 +69,10 @@ class UninstallCommand extends ContainerAwareCommand {
         if ($dialog->askConfirmation($output, '<question>Delete database (Y/N)?</question>', false)) {
             $this->runCommand('doctrine:database:drop', $argvInput, $output);
         }
-        $output->writeln('<info>Clear cache.</info>');
-        $this->runCommand('cache:clear', $input, $output);
+        if($env != 'dev'){
+            $output->writeln('<info>Clear cache.</info>');
+            $this->runCommand('cache:clear', $input, $output);
+        }
         
         $output->writeln('');
         
