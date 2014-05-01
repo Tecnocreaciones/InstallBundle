@@ -109,7 +109,8 @@ class InstallCommand extends ContainerAwareCommand
         $roles = array();
         $roles['role'] = $role;
         if($this->getApplication()->getKernel()->isClassInActiveBundle('Sonata\AdminBundle\SonataAdminBundle')){
-            $roles[]= 'ROLE_SONATA_ADMIN';
+            $roles[]= 'ROLE_SONATA_ADMIN';//Rol para acceder al administrador
+            $roles[]= 'ROLE_ALLOWED_TO_SWITCH';//Rol para porder probar usuarios
         }
         $username = $dialog->ask($output, sprintf('<question>Username[%s]:</question>',$username),$username);
         $password = $dialog->ask($output, sprintf('<question>Password[%s]:</question>',$password),$password);
