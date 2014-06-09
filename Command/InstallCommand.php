@@ -90,16 +90,18 @@ class InstallCommand extends ContainerAwareCommand
             ->runCommand('assetic:dump', $input, $output)
             ->runCommand('assets:install', $input, $output)
         ;
-
-        if ($dialog->askConfirmation($output, '<question>Load fixtures (Y/N)?</question>', false)) {
-            $this->runCommand('doctrine:fixtures:load', $input, $output);
+        
+        if($this->hasCommand('doctrine:fixtures:load')){
+            if ($dialog->askConfirmation($output, '<question>Load fixtures (Y/N)?</question>', false)) {
+                $this->runCommand('doctrine:fixtures:load', $input, $output);
+            }
         }
 
         $output->writeln('');
         $output->writeln('<info>Administration setup.</info>');
         
         $userManager = $this->getContainer()->get('fos_user.user_manager');
-        $user = $userManager->create();
+        $user = $userManager->createUser();
         
         $username = $this->getContainer()->getParameter('tec_install.credentials.username');
         $password = $this->getContainer()->getParameter('tec_install.credentials.password');
@@ -124,7 +126,7 @@ class InstallCommand extends ContainerAwareCommand
         $user->setEnabled(true);
         
         $user->setRoles($roles);
-        $userManager->save($user);
+        $userManager->updateUser($user,true);
 
         $output->writeln('');
 
@@ -138,7 +140,12 @@ class InstallCommand extends ContainerAwareCommand
             ->find($command)
             ->run($input, $output)
         ;
-
+        
         return $this;
+    }
+    
+    private function hasCommand($name)
+    {
+        return $this->getApplication()->has($name);
     }
 }
